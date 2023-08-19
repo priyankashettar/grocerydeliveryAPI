@@ -1,0 +1,48 @@
+version: "3.8"
+services:
+  order-delivery-app:
+    build: 
+      context: .
+      dockerfile: Dockerfile.test
+    volumes:
+      - ./:/app
+    depends_on:
+      - order-delivery-db 
+      - pgadmin
+    environment:
+      - DB_DBNAME=order-delivery-db
+      - DB_HOST=order-delivery-db
+      - DB_USER=dev
+      - DB_PASS=dev
+      - DB_PORT=5432
+     # - DB_URL=postgresql+psycopg2://dev:dev@order-delivery-db:5432/order-delivery-db
+    ports:
+      - "8082:8080"    
+  order-delivery-db:
+    image: postgres:14
+    container_name: postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=dev
+      - POSTGRES_PASSWORD=dev
+      - POSTGRES_DB=order-delivery-db
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    volumes:
+      - data:/var/lib/postgresql/data
+  
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    restart: always
+    ports:
+      - "5050:5050"
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=priya@email.com
+      - PGADMIN_DEFAULT_PASSWORD=admin
+      - PGADMIN_LISTEN_PORT=5050
+    depends_on:
+      - order-delivery-db    
+volumes:
+  data:   
