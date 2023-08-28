@@ -6,14 +6,16 @@ from sqlalchemy_utils.types import ChoiceType
 Base=declarative_base()
 
 class Customer(Base):
-    __tablename__='customer'
+    __tablename__='customers'
+
     id=Column(Integer,primary_key=True)
     cust_name=Column(String(40),unique=True)
     email=Column(String(80),unique=True)
     password=Column(Text,nullable=True)
     active_cust=Column(Boolean,default=False)
     sales=Column(Boolean,default=False)
-    orders=relationship('Order', back_populates='customer')
+
+    orders=relationship('Order', back_populates='owner')
     
     def __repr__(self):
         return f"<Customer {self.cust_name}>"
@@ -33,12 +35,14 @@ class Order(Base):
     )
 
     __tablename__='orders'
+
     ord_id=Column(Integer,primary_key=True)
     quantity=Column(Integer, nullable=False)
     order_status=Column(ChoiceType(choices=ORDER_STATUS), default='ORDER-PLACED')
     order_size=Column(ChoiceType(choices=ORDER_SIZE), default='SMALL')
-    cust_id=Column(Integer,ForeignKey('customer.id'))
-    customers=relationship('Customer', back_populates='orders')
+
+    cust_id=Column(Integer,ForeignKey('customers.id'))
+    owner=relationship('Customer', back_populates='orders')
     
     def __repr__(self):
         return f"<Order {self.ord_id}>"

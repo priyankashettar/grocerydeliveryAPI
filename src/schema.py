@@ -20,7 +20,7 @@ class BaseCustomer(BaseModel):
                 "sales":False
             }
         }
-"""
+
 class JWT_Config(BaseModel):
     #import from secrets.token_hex()
     authjwt_secret_key:str='4717444db83ffe012d34c2dc2bf57211e982ce1366f65415bbaeb959c5578086'
@@ -29,7 +29,7 @@ class authenticate(BaseModel):
     cust_name:str
     password:str
     
- """  
+   
 class BaseOrder(BaseModel):
     ord_id:Optional[int]
     quantity: int

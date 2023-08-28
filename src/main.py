@@ -1,11 +1,10 @@
 from fastapi import FastAPI
 from src.router_auth import router_auth
 from src.router_order import router_order
-#from sqlalchemy import create_engine
 import src.service as _service
 import src.db as _db
-#from fastapi_jwt_auth import AuthJWT
-#from src.schema import JWT_Config
+from fastapi_jwt_auth import AuthJWT
+import src.schema as _sm
 
 
 #DATABASE_URL = "postgresql+psycopg2://dev:dev@order-delivery-db:5432/order-delivery-db"
@@ -16,11 +15,11 @@ _service.add_schema()
  
 
 app=FastAPI()
-"""
+
 @AuthJWT.load_config
 def get_config():
-    return JWT_Config 
-"""
+    return _sm.JWT_Config 
+
 app.include_router(router_auth)
 app.include_router(router_order)
 

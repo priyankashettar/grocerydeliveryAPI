@@ -1,12 +1,12 @@
-from fastapi import APIRouter, status #, Depends
+from fastapi import APIRouter, status, Depends
 from fastapi.exceptions import HTTPException
 from src.db import Session,db_engine
-from src.schema import BaseCustomer #, authenticate
+from src.schema import BaseCustomer, authenticate
 from src.models import Customer
 from fastapi.exceptions import HTTPException
-from werkzeug.security import generate_password_hash #, check_password_hash
-#from fastapi_jwt_auth import AuthJWT
-#from fastapi.encoders import jsonable_encoder
+from werkzeug.security import generate_password_hash, check_password_hash
+from fastapi_jwt_auth import AuthJWT
+from fastapi.encoders import jsonable_encoder
 
 
 router_auth= APIRouter(
@@ -17,9 +17,6 @@ router_auth= APIRouter(
 session=Session(bind=db_engine)    
 
 @router_auth.get('/')
-async def hello():
-    return{"message":"hello!!!"}
-"""
 async def hello(authorize:AuthJWT=Depends()):
     try:
         authorize.jwt_required()
@@ -28,17 +25,18 @@ async def hello(authorize:AuthJWT=Depends()):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,detail="Invalid token!!")
     
     return{"message":"hello!!!"}
-"""
+
+
 @router_auth.post('/signup',response_model=BaseCustomer,status_code=status.HTTP_201_CREATED)
 async def signup(customer:BaseCustomer):
     print("Inside Signup!")
-    email_auth=session.query(customer).filter(customer.email==Customer.email).first()
+    email_auth=session.query(Customer).filter(Customer.email==customer.email).first()
     
     print("Logged in !!")
     if email_auth is not None:
         return HTTPException(status_code=status.HTTP_400_BAD_REQUEST,detail="Email already exists!")
     
-    cust_name_auth=session.query(customer).filter(customer.cust_name==Customer.cust_name).first()
+    cust_name_auth=session.query(Customer).filter(Customer.cust_name==customer.cust_name).first()
     if cust_name_auth is not None:
         return HTTPException(status_code=status.HTTP_400_BAD_REQUEST,detail="customer with this name already exists!")
     
@@ -59,7 +57,7 @@ async def signup(customer:BaseCustomer):
 
     return new_cust
 
-"""
+
 #authentication route
 @router_auth.post('/login', status_code=200)
 async def login(customer:authenticate,authorize:AuthJWT=Depends()):
@@ -92,4 +90,3 @@ async def token_refresh(authorize:AuthJWT=Depends()):
 
     return jsonable_encoder({"access":access_token})
 
-"""
