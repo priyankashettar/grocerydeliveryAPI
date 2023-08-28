@@ -84,7 +84,7 @@ async def token_refresh(authorize:AuthJWT=Depends()):
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token refresh required!!")    
     
-    current_customer=authorize.get_jwt_identity()
+    current_customer=authorize.get_jwt_subject()
 
     access_token=authorize.create_access_token(subject=current_customer)
 

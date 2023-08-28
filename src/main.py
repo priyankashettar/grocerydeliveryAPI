@@ -18,7 +18,7 @@ app=FastAPI()
 
 @AuthJWT.load_config
 def get_config():
-    return _sm.JWT_Config 
+    return _sm.JWT_Config() 
 
 app.include_router(router_auth)
 app.include_router(router_order)
