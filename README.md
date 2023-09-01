@@ -98,9 +98,9 @@ This project is licensed under the [Apache License 2.0].
 
 
 ## References
-https://fastapi.tiangolo.com/
-https://www.postgresql.org/docs/current/
-https://docs.sqlalchemy.org/en/20/
-https://swagger.io/specification/
+- https://fastapi.tiangolo.com/
+- https://www.postgresql.org/docs/current/
+- https://docs.sqlalchemy.org/en/20/
+- https://swagger.io/specification/
 
 
