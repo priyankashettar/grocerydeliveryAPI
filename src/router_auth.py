@@ -18,6 +18,9 @@ session=Session(bind=db_engine)
 
 @router_auth.get('/')
 async def hello(authorize:AuthJWT=Depends()):
+    """
+        ##Welcome Message
+    """
     try:
         authorize.jwt_required()
 
@@ -29,6 +32,15 @@ async def hello(authorize:AuthJWT=Depends()):
 
 @router_auth.post('/signup',response_model=BaseCustomer,status_code=status.HTTP_201_CREATED)
 async def signup(customer:BaseCustomer):
+    """
+        ##Signup Page
+        Customer needs to signup first providing the following details
+        - cust_name: string
+        - email: string
+        - password: text
+        - active_cust: bool
+        - sales: bool
+    """
     print("Inside Signup!")
     email_auth=session.query(Customer).filter(Customer.email==customer.email).first()
     
@@ -61,6 +73,9 @@ async def signup(customer:BaseCustomer):
 #authentication route
 @router_auth.post('/login', status_code=200)
 async def login(customer:authenticate,authorize:AuthJWT=Depends()):
+    """
+        ##Login for authentication with cust_name and password
+    """
     db_cust=session.query(Customer).filter(Customer.cust_name==customer.cust_name).first()
     if db_cust and check_password_hash(db_cust.password, customer.password):
         access_token=authorize.create_access_token(subject=db_cust.cust_name)
@@ -78,6 +93,9 @@ async def login(customer:authenticate,authorize:AuthJWT=Depends()):
 #Refresh JWT token
 @router_auth.get('/refresh')
 async def token_refresh(authorize:AuthJWT=Depends()):
+    """
+        ##JWT token refresh to access the encrypted endpoints
+    """
     try:
         authorize.jwt_refresh_token_required()
 

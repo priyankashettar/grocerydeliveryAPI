@@ -45,3 +45,15 @@ class BaseOrder(BaseModel):
                 "order_size":"MEDIUM"
             }
         }
+
+
+class BaseOrderStatus(BaseModel):
+    order_status:Optional[str]="PENDING"
+
+    class Config:
+        orm_mode=True
+        schema_extra={
+            "example":{
+                "order_status":"PENDING"
+            }
+        }        
