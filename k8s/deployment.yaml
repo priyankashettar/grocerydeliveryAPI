@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order-delivery-service
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: order-delivery-app
+  template:
+    metadata:
+      labels:
+        app: order-delivery-app
+    spec:
+      containers:
+      - name: order-delivery-service
+        image: order-delivery-service-order-delivery-app:latest
+        ports:
+        - containerPort: 80
